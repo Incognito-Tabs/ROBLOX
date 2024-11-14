@@ -125,6 +125,26 @@ function Signal:Connect(handler)
 end
 
 --[=[
+	Connect a new, one-time handler to the event. Returns a connection object that can be disconnected.
+	@param handler (... T) -> () -- One-time function handler called when :Fire(...) is called
+	@return RBXScriptConnection
+]=]
+function Signal:Once(handler)
+	if not (type(handler) == "function") then
+		error(("once(%s)"):format(typeof(handler)), 2)
+	end
+
+	return self._bindableEvent.Event:Once(function(key)
+		local args = self._argMap[key]
+		if args then
+			handler(table.unpack(args, 1, args.n))
+		else
+			error("Missing arg data, probably due to reentrance.")
+		end
+	end)
+end
+
+--[=[
 	Wait for fire to be called, and return the arguments it was given.
 	@yields
 	@return T
