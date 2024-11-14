@@ -58,6 +58,8 @@ function Signal.new()
 	self._bindableEvent = Instance.new("BindableEvent")
 	self._argMap = {}
 	self._source = ENABLE_TRACEBACK and debug.traceback() or ""
+    self._active = true
+    self._connected = false
 
 	-- Events in Roblox execute in reverse order as they are stored in a linked list and
 	-- new connections are added at the head. This event will be at the tail of the list to
@@ -81,7 +83,7 @@ end
 	@param ... T -- Variable arguments to pass to handler
 ]=]
 function Signal:Fire(...)
-	if not self._bindableEvent then
+	if not self._bindableEvent or not self._connected or not self._active then
 		warn(("Signal is already destroyed. %s"):format(self._source))
 		return
 	end
@@ -106,30 +108,13 @@ function Signal:Connect(handler)
 		error(("connect(%s)"):format(typeof(handler)), 2)
 	end
 
+    self._active = true
+    self._connected = true
+
 	return self._bindableEvent.Event:Connect(function(key)
 		-- note we could queue multiple events here, but we'll do this just as Roblox events expect
 		-- to behave.
 
-		local args = self._argMap[key]
-		if args then
-			handler(table.unpack(args, 1, args.n))
-		else
-			error("Missing arg data, probably due to reentrance.")
-		end
-	end)
-end
-
---[=[
-	Connect a new, one-time handler to the event. Returns a connection object that can be disconnected.
-	@param handler (... T) -> () -- One-time function handler called when `:Fire(...)` is called
-	@return RBXScriptConnection
-]=]
-function Signal:Once(handler)
-	if not (type(handler) == "function") then
-		error(("once(%s)"):format(typeof(handler)), 2)
-	end
-
-	return self._bindableEvent.Event:Once(function(key)
 		local args = self._argMap[key]
 		if args then
 			handler(table.unpack(args, 1, args.n))
@@ -166,6 +151,9 @@ function Signal:Disconnect()
 
 		self._bindableEvent:Destroy()
 		self._bindableEvent = nil
+
+        self._active = false
+        self._connected = false
 	end
 
 	-- Do not remove the argmap. It will be cleaned up by the cleanup connection.
