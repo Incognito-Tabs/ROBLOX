@@ -1,5 +1,5 @@
 local List = {
-    [1390601379] = "https://raw.githubusercontent.com/Incognito-RBX/Roblox/refs/heads/main/Xodus/Combat%Warriors.lua",
+    [1390601379] = "https://raw.githubusercontent.com/Incognito-RBX/Roblox/refs/heads/main/Xodus/Combat%20Warriors.lua",
     [1494262959] = "https://raw.githubusercontent.com/Incognito-RBX/Roblox/refs/heads/main/Xodus/Criminality.lua",
     [3326279937] = "https://raw.githubusercontent.com/Incognito-RBX/Roblox/refs/heads/main/Xodus/Blackout.lua",
 }
