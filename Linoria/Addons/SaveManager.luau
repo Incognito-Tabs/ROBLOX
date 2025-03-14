@@ -370,18 +370,6 @@ local SaveManager = {} do
 	
 			SaveManager:SetIgnoreIndexes({ "SaveManager_ConfigList", "SaveManager_ConfigName" })
 		end
-
-		local Statistics = Tab:AddRightGroupbox("Statistics") do
-			Fondra.UI["UsersInServer"]		= Statistics:AddLabel("Fondra Users in Server: %s")
-			Fondra.UI["ActiveUsers"] 		= Statistics:AddLabel("Active Fondra Users: %s")
-			Fondra.UI["TotalExecutions"] 	= Statistics:AddLabel("Total Fondra Executions: %s")
-
-			Statistics:AddBlank(10)
-			
-			Statistics:AddLabel("Note that 'Fondra Users In Server' wont show anyone who has telemetry off.", true)
-			Statistics:AddBlank(5)
-			Statistics:AddLabel("Note that 'Active Fondra Users' includes people with telemetry off.", true)
-		end
 	end
 end
 
